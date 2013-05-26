@@ -19,6 +19,7 @@ type
     MenuItem1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
+    function get_current_directory() : String;
   private
     { private declarations }
   public
@@ -27,7 +28,7 @@ type
 
 var
   Form1: TForm1;
-  working_directory : String; //viariable which gets the name of the current directory to access the required componnents
+  current_directory : String; //viariable which gets the name of the current directory to access the required componnents
 
 implementation
 
@@ -41,10 +42,23 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+
+begin
+
+  //save the path in the variable working_directory
+  current_directory := get_current_directory();
+  //give current directory out per label-component
+  Label1.Caption := 'current directory: ' + current_directory;
+end;
+
+
+
+//function which gets the path of the current directory
+function TForm1.get_current_directory() : String;
 var P : TProcess;
   S : TStringList;
 begin
-  //create new process
+   //create new process
   P := TProcess.Create(nil);
   //create new stringlist
   S := TStringlist.Create;
@@ -58,10 +72,7 @@ begin
   S.LoadFromStream(P.Output);
   //S as stringlist should only have one string in it.
   //thats the path of our current directory
-  //save the path in the variable working_directory
-  working_directory := S[0];
-  //give current directory out per label-component
-  Label1.Caption := 'current directory' + working_directory;
+  result := S[0];
 end;
 
 end.
