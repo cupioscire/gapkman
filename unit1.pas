@@ -13,10 +13,12 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Label1: TLabel;
     MainMenu1: TMainMenu;
     Memo1: TMemo;
     MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
     StatusBar1: TStatusBar;
     procedure FormCreate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
@@ -50,30 +52,28 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   write_status_message('----Starting GAPKMAN----');
-  write_status_message('->get current directory');
+  write_status_message('[TRY] getting current directory');
   //save the path in the variable working_directory
   current_directory := get_current_directory();
-  //give current directory out per label-component
-  Label1.Caption := 'current directory: ' + current_directory;
-  write_status_message('-->finished: get current directory');
+  write_status_message('[FINISHED] get current directory');
   //check if all needed files are there
-  write_status_message('->check for all needed files in "other" directory (they should be there)');
-  if check_for_needed_files() then write_status_message('-->SUCCESS!')
-  else write_status_message('ERROR: missing files; please check');
-  write_status_message('->check for all needed executables on the computer');
-  if (java_path <> '') AND (sudo_path <> '') AND (adb_path <> '') AND (sox_path <> '') then
+  write_status_message('[CHECK] needed files in "other" directory (they should be there)');
+  if check_for_needed_files() then write_status_message('[SUCCESS] needed files in "other"')
+  else write_status_message('[ERROR] missing files; please check');
+  write_status_message('[CHECK] needed executables on your system');
+  if (java_path <> '') AND (sudo_path <> '') AND (adb_path <> '') {AND (sox_path <> '')} then
   begin
-    write_status_message(' ->FOUND java at: ' + java_path);
-    write_status_message(' ->FOUND sudo at: ' + sudo_path);
-    write_status_message(' ->FOUND  adb at: ' + adb_path);
-    write_status_message(' ->FOUND  sox at: ' + sox_path);
-    write_status_message('-->all executables found!');
+    write_status_message('[FOUND] java at: ' + java_path);
+    write_status_message('[FOUND] sudo at: ' + sudo_path);
+    write_status_message('[FOUND]  adb at: ' + adb_path);
+    {write_status_message('[FOUND]  sox at: ' + sox_path);}
+    write_status_message('[FINISHED] all executables found!');
   end
   else
   begin
-    write_status_message('-->ERROR: missing executables; please check!');
+    write_status_message('[ERROR] missing executables; please check!');
   end;
-  write_status_message('GAPKMAN ready');
+  write_status_message('[READY] GAPKMAN');
 end;
 
 
@@ -136,7 +136,7 @@ begin
   java_path := FindDefaultExecutablePath('java');
   sudo_path := FindDefaultExecutablePath('sudo');
   adb_path  := FindDefaultExecutablePath('adb');
-  sox_path  := FindDefaultExecutablePath('sox');
+  {sox_path  := FindDefaultExecutablePath('sox');}//sox removed, because this function is not includet yet
   if check = 7 then result := true
   else result := false;
 end;

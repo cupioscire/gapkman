@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 247
+  Left = 234
   Height = 389
-  Top = 156
+  Top = 140
   Width = 511
-  Caption = 'Form1'
+  Caption = 'GAPKMAN'
   ClientHeight = 389
   ClientWidth = 511
   Menu = MainMenu1
@@ -11,18 +11,12 @@ object Form1: TForm1
   LCLVersion = '1.0.8.0'
   object Memo1: TMemo
     Left = 0
-    Height = 304
-    Top = 24
-    Width = 512
-    TabOrder = 0
-  end
-  object Label1: TLabel
-    Left = 0
-    Height = 18
+    Height = 376
     Top = 0
-    Width = 120
-    Caption = 'current directory:'
-    ParentColor = False
+    Width = 512
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+    TabStop = False
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -36,6 +30,15 @@ object Form1: TForm1
     object MenuItem1: TMenuItem
       Caption = 'File'
       OnClick = MenuItem1Click
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'ADB'
+      object MenuItem3: TMenuItem
+        Caption = 'adb pull'
+      end
+      object MenuItem4: TMenuItem
+        Caption = 'adb push (system-apk only)'
+      end
     end
   end
 end
