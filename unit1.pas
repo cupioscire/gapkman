@@ -20,11 +20,15 @@ type
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     StatusBar1: TStatusBar;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     function get_current_directory() : String;
     procedure write_status_message(status : String);
     function check_for_needed_files():boolean;
+    procedure start_adb_daemon();
+    procedure stop_adb_daemon();
+    procedure adb_pull();
   private
     { private declarations }
   public
@@ -38,6 +42,7 @@ var
   sudo_path : String;
   adb_path : String;
   sox_path : String;
+  adb_started : boolean;
 implementation
 
 {$R *.lfm}
@@ -51,6 +56,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  adb_started := false;
   write_status_message('----Starting GAPKMAN----');
   write_status_message('[TRY] getting current directory');
   //save the path in the variable working_directory
@@ -68,12 +74,19 @@ begin
     write_status_message('[FOUND]  adb at: ' + adb_path);
     {write_status_message('[FOUND]  sox at: ' + sox_path);}
     write_status_message('[FINISHED] all executables found!');
+    start_adb_daemon();
+    write_status_message('[READY] GAPKMAN');
   end
   else
   begin
     write_status_message('[ERROR] missing executables; please check!');
   end;
-  write_status_message('[READY] GAPKMAN');
+
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  stop_adb_daemon();
 end;
 
 
@@ -132,6 +145,7 @@ begin
   end;
   P.Free;
   S.Free;
+
   //search for more required files
   java_path := FindDefaultExecutablePath('java');
   sudo_path := FindDefaultExecutablePath('sudo');
@@ -139,6 +153,75 @@ begin
   {sox_path  := FindDefaultExecutablePath('sox');}//sox removed, because this function is not includet yet
   if check = 7 then result := true
   else result := false;
+end;
+
+
+//procedure which starts the adb daemon
+procedure TForm1.start_adb_daemon();
+var P : TProcess;
+  S : TStringList;
+  i : Integer;
+begin
+  //lets creating the adb process
+  P := TProcess.create(nil);
+  S := TStringList.create();
+  //get path to adb-executable from variable
+  P.CommandLine:= adb_path+ ' start-server';
+  P.Options:=[poWaitOnExit, poUsePipes];
+  P.Execute();
+  S.LoadFromStream(P.output);
+  write_status_message('[START] adb-daemon');
+  //read output from adb-command
+  for i:=0 to S.Count-1 do
+  begin
+   write_status_message(S[i]);
+  end;
+  adb_started := true;
+  P.Free;
+  S.Free;
+
+end;
+
+
+//procedure which stops the adb-daemon
+procedure TForm1.stop_adb_daemon();
+var P : TProcess;
+  S : TStringList;
+  i : Integer;
+begin
+  if adb_started then
+  begin
+  //lets create the process
+  P := TProcess.create(nil);
+  S := TStringList.create();
+  //get adb_path ffrom variable
+  P.CommandLine:=  adb_path + ' kill-server';
+  P.Options := [poWaitonExit, poUsePipes];
+  P.execute();
+  S.LoadFromStream(P.output);
+  for i := 0 to S.count-1 do
+  begin
+   write_status_message(S[i]);
+  end;
+  P.Free;
+  S.Free;
+
+  end
+  else;
+end;
+
+
+//procedure which runs the adb pull command
+procedure TForm1.adb_pull();
+var P : TProcess;
+  S : tStringList;
+  i : Integer;
+  pull_from : String;
+begin
+{  P := TProcess.create(nil);
+  S := TStringList.create();
+  InputBox('ertse', 'zweite', pull_from);
+ }
 end;
 
 end.

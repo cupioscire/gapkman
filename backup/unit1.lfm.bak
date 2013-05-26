@@ -7,6 +7,7 @@ object Form1: TForm1
   ClientHeight = 389
   ClientWidth = 511
   Menu = MainMenu1
+  OnClose = FormClose
   OnCreate = FormCreate
   LCLVersion = '1.0.8.0'
   object Memo1: TMemo
