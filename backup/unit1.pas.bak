@@ -44,7 +44,6 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 
 begin
-
   //save the path in the variable working_directory
   current_directory := get_current_directory();
   //give current directory out per label-component
@@ -72,7 +71,7 @@ begin
   S.LoadFromStream(P.Output);
   //S as stringlist should only have one string in it.
   //thats the path of our current directory
-  result := S[0];
+  result := GetCurrentDir();
 end;
 
 end.

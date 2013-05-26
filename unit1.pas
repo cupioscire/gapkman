@@ -54,24 +54,8 @@ end;
 
 //function which gets the path of the current directory
 function TForm1.get_current_directory() : String;
-var P : TProcess;
-  S : TStringList;
 begin
-   //create new process
-  P := TProcess.Create(nil);
-  //create new stringlist
-  S := TStringlist.Create;
-  //process run pwd command(linux)
-  P.CommandLine := 'pwd';
-  //process saves output of pwd in a stream and we will wait until pwd has finished
-  P.Options := [poWaitOnExit, poUsePipes];
-  //execute pwd process
-  P.Execute;
-  //loading output of pwd from output-stream
-  S.LoadFromStream(P.Output);
-  //S as stringlist should only have one string in it.
-  //thats the path of our current directory
-  result := S[0];
+  result := GetCurrentDir();
 end;
 
 end.
