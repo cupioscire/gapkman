@@ -51,7 +51,7 @@ implementation
 
 procedure TForm1.MenuItem1Click(Sender: TObject);
 begin
-
+  //code is missing
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
